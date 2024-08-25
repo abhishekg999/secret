@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Copy, Link, AlertCircle } from 'lucide-react';
-import { type RequestSecretSchema } from '../secret-worker/src/db/schema'
 
 const OneTimeSecret = () => {
   const [secret, setSecret] = useState('');
@@ -23,7 +22,7 @@ const OneTimeSecret = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ data: data.trim() } as RequestSecretSchema),
+        body: JSON.stringify({ data: data.trim() }),
       });
 
       if (response.ok) {
