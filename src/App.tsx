@@ -17,7 +17,7 @@ const OneTimeSecret = () => {
     setInputEnabled(false);
 
     const fetchData = async () => {
-      const response = await fetch('/api/new', {
+      const response = await fetch('/api/secret/new', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ const OneTimeSecret = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setGeneratedLink(`${window.location.origin}/secret/${data.id}`);
+        setGeneratedLink(`${window.location.origin}/${data.id}`);
       } else {
         setGeneratedLink('');
         setError('An error occurred while creating the secret link. Please refresh and try again.');
