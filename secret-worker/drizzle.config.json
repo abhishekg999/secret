@@ -1,0 +1,8 @@
+{
+    "schema": "src/db/schema.ts",
+    "out": "drizzle/migrations",
+    "dialect": "sqlite",
+    "dbCredentials": {
+        "url": ".wrangler/state/v3/d1/miniflare-D1DatabaseObject/b60beec082e9a6bc4b6e34c6f10a8802ed0446b589791da93455ac6f46c2fc22.sqlite"
+    }
+}
