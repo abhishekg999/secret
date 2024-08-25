@@ -1,8 +1,3 @@
-```
-npm install
-npm run dev
-```
+# Cloudflare Worker Handling /api
 
-```
-npm run deploy
-```
+Uses Cloudflare D1 for storage, with Drizzle ORM.
