@@ -51,7 +51,7 @@ const Home = () => {
             value={secret}
             onChange={(e) => setSecret(e.target.value)}
             disabled={!inputEnabled}
-            maxLength={10000}
+            maxLength={4000}
           />
           <button
             className={`mt-4 w-full bg-purple-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out flex items-center justify-center ${inputEnabled
