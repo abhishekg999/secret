@@ -15,7 +15,7 @@ app.use(logger())
 
 const api = new Hono<Context>();
 
-api.get(`/secret/:id{${UUID_REGEX}}`, async (c) => {
+api.post(`/secret/:id{${UUID_REGEX}}`, async (c) => {
   const { id } = c.req.param();
   const db = drizzle(c.env.DB);
   const result = await db.delete(secrets).where(eq(secrets.id, id)).returning();
