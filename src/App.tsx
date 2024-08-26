@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import Home from './components/Home';
 import View from './components/View';
 import { isValidUUID } from './lib/utils';
