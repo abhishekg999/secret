@@ -1,3 +1,3 @@
-# Simple One Time Secret Service
+# One Time Secret Service
 
 
