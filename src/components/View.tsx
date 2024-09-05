@@ -63,7 +63,7 @@ const View = ({ hash }: ViewProps) => {
             <>
               <h2 className="text-xl text-gray-100 font-bold mb-2">Your Secret:</h2>
               <div className="bg-gray-700 p-4 rounded-md">
-                <p className="text-gray-300 whitespace-pre-wrap">
+                <p className="text-gray-300 whitespace-pre-wrap break-words">
                   {secret}
                 </p>
               </div>
