@@ -5,7 +5,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
-import { base64ToUint8, createEncryptionPair, decryptData, uint8ToBase64 } from '@/lib/utils';
+import { createEncryptionPair } from '@/lib/utils';
 
 const Home = () => {
   const [secret, setSecret] = useState('');
