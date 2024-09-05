@@ -4,15 +4,14 @@ import { isValidUUID } from './lib/utils';
 
 
 const App = () => {
-  const hash = window.location.hash.substring(1);
-  if (!isValidUUID(hash) && window.location.pathname !== '/') {
+  const path = window.location.pathname.endsWith('/') ? window.location.pathname.slice(0, -1) : window.location.pathname;
+  if (isValidUUID(path.slice(1))) {
+    return <View hash={path.slice(1)} />;
+  } else if (path === '') {
+    return <Home />;
+  } else {
     window.location.replace('/');
   }
-
-  return (
-    <>
-      {isValidUUID(hash) ? <View hash={hash} /> : <Home />}
-    </>
-  );
+  return null;
 }
 export default App;

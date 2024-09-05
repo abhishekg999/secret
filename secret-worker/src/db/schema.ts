@@ -10,7 +10,7 @@ export const secrets = sqliteTable('secrets', {
 
 export const insertSecretSchema = createInsertSchema(secrets, {
     id: (schema) => schema.id.uuid(),
-    data: (schema) => schema.data.max(4096),
+    data: (schema) => schema.data.max(22000), 
     timestamp: (schema) => schema.timestamp.min(0)
 });
 
