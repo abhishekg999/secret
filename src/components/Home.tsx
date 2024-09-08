@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Copy, Link, AlertCircle, HelpCircle, GithubIcon } from 'lucide-react';
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card"
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { createEncryptionPair } from '@/lib/utils';
 
 const Home = () => {
@@ -53,16 +53,16 @@ const Home = () => {
   return (
     <>
       <div className='absolute top-6 right-6'>
-        <HoverCard>
-          <HoverCardTrigger>
+        <Popover>
+          <PopoverTrigger>
             <HelpCircle className='text-gray-400 hover:text-white w-8 h-8' />
-          </HoverCardTrigger>
-          <HoverCardContent className='bg-white text-gray-800 p-4 shadow-lg rounded-md mx-6'>
+          </PopoverTrigger>
+          <PopoverContent className='bg-white text-gray-800 p-4 shadow-lg rounded-md mx-6'>
             <p className='text-sm'>
               This site allows you to create one-time links <b className='text-purple-900'>securely</b>. All data is end-to-end encrypted, the key <b className='text-red-800'>never</b> leaves your device. If the link is viewed once, it is <b className='text-orange-900'>permanently deleted</b> from the server.
             </p>
-          </HoverCardContent>
-        </HoverCard>
+          </PopoverContent>
+        </Popover>
       </div>
       <div className="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md border border-gray-700">
         <h1 className="text-2xl font-bold text-gray-100 mb-4 text-center">Create One-Time Link</h1>
