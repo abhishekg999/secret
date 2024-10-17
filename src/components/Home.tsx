@@ -64,7 +64,7 @@ const Home = () => {
           </PopoverContent>
         </Popover>
       </div>
-      <div className="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md border border-gray-700">
+      <div className="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-3xl border border-gray-700">
         <h1 className="text-2xl font-bold text-gray-100 mb-4 text-center">Create One-Time Link</h1>
         <textarea
           className="w-full h-32 p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none bg-gray-700 text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"

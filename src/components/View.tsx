@@ -43,7 +43,7 @@ const View = ({ hash }: ViewProps) => {
   };
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md border border-gray-700">
+    <div className="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-3xl border border-gray-700">
       {!isViewing ? (
         <div className="text-center flex flex-col">
           <p className="text-gray-300 mb-4">
