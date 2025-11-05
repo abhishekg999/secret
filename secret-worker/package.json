@@ -4,19 +4,19 @@
     "dev": "wrangler dev src/index.ts --env dev",
     "deploy": "wrangler deploy --minify src/index.ts --env production",
     "db:generate": "drizzle-kit generate",
-    "db:up": "drizzle-kit up"
+    "db:push": "drizzle-kit push"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.2.2",
     "drizzle-orm": "^0.33.0",
     "drizzle-zod": "^0.5.1",
-    "hono": "^4.5.11",
-    "zod": "^3.23.8"
+    "hono": "^4.10.4",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240903.0",
+    "@cloudflare/workers-types": "^4.20251014.0",
     "@libsql/client": "^0.9.0",
     "drizzle-kit": "^0.24.2",
-    "wrangler": "^3.74.0"
+    "wrangler": "^3.114.15"
   }
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Copy, Link, AlertCircle, HelpCircle, GithubIcon } from 'lucide-react';
 import {
   Popover,
@@ -6,12 +6,25 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { createEncryptionPair } from '@/lib/utils';
+import { MESSAGE_MIN_HEIGHT, MESSAGE_MAX_HEIGHT, MAX_SECRET_LENGTH } from '@/constants';
 
 const Home = () => {
   const [secret, setSecret] = useState('');
   const [generatedLink, setGeneratedLink] = useState('');
   const [inputEnabled, setInputEnabled] = useState(true);
   const [error, setError] = useState('');
+  const [copied, setCopied] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = `${MESSAGE_MIN_HEIGHT}px`;
+      const scrollHeight = textareaRef.current.scrollHeight;
+      const newHeight = Math.min(scrollHeight, MESSAGE_MAX_HEIGHT);
+      textareaRef.current.style.height = `${newHeight}px`;
+    }
+  }, [secret]);
 
   const handleCreateLink = () => {
     const data = secret.trim();
@@ -21,6 +34,7 @@ const Home = () => {
     }
 
     setInputEnabled(false);
+    setIsSubmitting(true);
 
     const uploadSecret = async () => {
       const [key, enc] = await createEncryptionPair(data, 21);
@@ -32,7 +46,7 @@ const Home = () => {
         body: JSON.stringify({ data: enc }),
       });
 
-      setSecret((prev) => prev.replace(/./g, '*'));
+      setSecret((prev) => prev.replace(/./g, '█'));
 
       if (response.ok) {
         const data = await response.json();
@@ -41,6 +55,7 @@ const Home = () => {
         setGeneratedLink('');
         setError('An error occurred while creating the secret link. Please refresh and try again.');
       }
+      setIsSubmitting(false);
     };
 
     uploadSecret();
@@ -48,6 +63,8 @@ const Home = () => {
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(generatedLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -57,26 +74,30 @@ const Home = () => {
           <PopoverTrigger>
             <HelpCircle className='text-gray-400 hover:text-white w-8 h-8' />
           </PopoverTrigger>
-          <PopoverContent className='bg-white text-gray-800 p-4 shadow-lg rounded-md mx-6'>
+          <PopoverContent className='bg-white text-gray-800 p-4 mx-6'>
             <p className='text-sm'>
               This site allows you to create one-time links <b className='text-purple-900'>securely</b>. All data is end-to-end encrypted, the key <b className='text-red-800'>never</b> leaves your device. If the link is viewed once, it is <b className='text-orange-900'>permanently deleted</b> from the server.
             </p>
           </PopoverContent>
         </Popover>
       </div>
-      <div className="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-3xl border border-gray-700">
+      <div className="bg-gray-800 p-6 w-full max-w-3xl border border-gray-700">
         <h1 className="text-2xl font-bold text-gray-100 mb-4 text-center">Create One-Time Link</h1>
         <textarea
-          className="w-full h-32 p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none bg-gray-700 text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+          ref={textareaRef}
+          className="w-full p-3 border border-gray-600 focus:border-2 focus:border-purple-900 focus:outline-none resize-none bg-gray-700 text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 ease-in-out overflow-y-auto"
+          style={{ minHeight: `${MESSAGE_MIN_HEIGHT}px`, maxHeight: `${MESSAGE_MAX_HEIGHT}px` }}
           placeholder="Enter your secret here..."
           value={secret}
           onChange={(e) => setSecret(e.target.value)}
           disabled={!inputEnabled}
-          maxLength={8192}
+          maxLength={MAX_SECRET_LENGTH}
         />
         <button
-          className={`mt-4 w-full bg-purple-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out flex items-center justify-center ${inputEnabled
-            ? 'hover:bg-purple-700 hover:shadow-lg transform hover:-translate-y-0.5'
+          className={`mt-4 w-full bg-purple-900 text-white font-bold py-2 px-4 border-2 border-purple-900 transition-all duration-300 ease-in-out flex items-center justify-center ${
+            isSubmitting ? 'animate-pulse border-purple-500' : ''
+          } ${inputEnabled
+            ? 'hover:bg-purple-800 hover:border-purple-800'
             : 'opacity-50 cursor-not-allowed'
             }`}
           onClick={handleCreateLink}
@@ -87,9 +108,9 @@ const Home = () => {
         </button>
 
         {generatedLink && (
-          <div className="mt-4">
+          <div className="mt-4 animate-fade-in">
             <p className="text-sm text-gray-400 mb-2">Your secret link:</p>
-            <div className="flex items-center bg-gray-700 p-2 rounded-md">
+            <div className="flex items-center bg-gray-700 p-3 border-l-4 border-purple-900">
               <input
                 type="text"
                 readOnly
@@ -98,17 +119,20 @@ const Home = () => {
               />
               <button
                 onClick={handleCopyLink}
-                className="ml-2 text-purple-400 hover:text-purple-300 transition duration-300 ease-in-out transform hover:scale-110"
-                title="Copy to clipboard"
+                className={`ml-2 transition duration-300 ease-in-out ${copied ? 'text-green-400' : 'text-purple-400 hover:text-purple-300'}`}
+                title={copied ? 'Copied!' : 'Copy to clipboard'}
               >
                 <Copy size={18} />
               </button>
+              {copied && (
+                <span className="ml-2 text-xs text-green-400 animate-pulse">Copied!</span>
+              )}
             </div>
           </div>
         )}
 
         {error && (
-          <div className="mt-4 bg-red-900 border border-red-700 text-red-100 px-4 py-3 rounded relative" role="alert">
+          <div className="mt-4 bg-red-900 border border-red-700 text-red-100 px-4 py-3 animate-fade-in" role="alert">
             <div className="flex items-center">
               <AlertCircle className="mr-2" size={18} />
               <span className="block sm:inline pl-2 pr-2">{error}</span>
@@ -117,11 +141,14 @@ const Home = () => {
         )}
       </div>
 
-      <footer className="sticky bottom-0 flex items-center text-center text-white w-full p-2">
-        <span className="mx-auto flex gap-4">
+      <footer className="sticky bottom-0 flex flex-col items-center text-center text-white w-full p-4 gap-2">
+        <p className="text-xs text-gray-400 max-w-2xl">
+          All data encrypted in your browser using AES-256-GCM. The decryption key never leaves your device.
+        </p>
+        <span className="flex gap-4 items-center text-sm">
           View the source on GitHub
           <a href="https://github.com/abhishekg999/secret" target="_blank" rel="noopener noreferrer">
-            <GithubIcon size={24} />
+            <GithubIcon size={20} />
           </a>
         </span>
       </footer>
