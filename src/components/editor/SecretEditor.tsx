@@ -8,13 +8,13 @@ import type { Attachment } from "@/lib/types";
 import AttachmentList from "./AttachmentList";
 import SizeBudget from "./SizeBudget";
 
-type SecretEditorProps = {
+interface SecretEditorProps {
   text: string;
   onTextChange: (text: string) => void;
   attachments: Attachment[];
   onAttachmentsChange: (attachments: Attachment[]) => void;
   disabled: boolean;
-};
+}
 
 const SecretEditor = ({
   text,
@@ -55,7 +55,7 @@ const SecretEditor = ({
       }
       onAttachmentsChange([...attachments, ...newAttachments]);
     },
-    [attachments, onAttachmentsChange]
+    [attachments, onAttachmentsChange],
   );
 
   const handlePaste = useCallback(
@@ -63,10 +63,10 @@ const SecretEditor = ({
       const files = Array.from(e.clipboardData.files);
       if (files.some((f) => f.type.startsWith("image/"))) {
         e.preventDefault();
-        addImages(files);
+        void addImages(files);
       }
     },
-    [addImages]
+    [addImages],
   );
 
   const handleDrop = useCallback(
@@ -74,9 +74,9 @@ const SecretEditor = ({
       e.preventDefault();
       setDragOver(false);
       const files = Array.from(e.dataTransfer.files);
-      addImages(files);
+      void addImages(files);
     },
-    [addImages]
+    [addImages],
   );
 
   const handleRemove = (id: string) => {
@@ -85,26 +85,28 @@ const SecretEditor = ({
 
   return (
     <div
-      className={`flex flex-col gap-3 ${
-        dragOver ? "ring-2 ring-purple-500 ring-inset" : ""
-      }`}
+      className={`flex flex-col gap-3 ${dragOver ? "ring-2 ring-inset ring-accent-ring" : ""}`}
       onDragOver={(e) => {
         e.preventDefault();
         setDragOver(true);
       }}
-      onDragLeave={() => setDragOver(false)}
+      onDragLeave={() => {
+        setDragOver(false);
+      }}
       onDrop={handleDrop}
     >
       <textarea
         ref={textareaRef}
-        className="w-full p-3 border border-gray-600 focus:border-2 focus:border-purple-900 focus:outline-none resize-none bg-gray-700 text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 ease-in-out overflow-y-auto"
+        className="w-full resize-none overflow-y-auto border border-edge-subtle bg-surface-inset p-3 text-content transition-all duration-300 ease-in-out focus:border-2 focus:border-accent focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
         style={{
           minHeight: `${MESSAGE_MIN_HEIGHT}px`,
           maxHeight: `${MESSAGE_MAX_HEIGHT}px`,
         }}
         placeholder="Enter your secret here..."
         value={text}
-        onChange={(e) => onTextChange(e.target.value)}
+        onChange={(e) => {
+          onTextChange(e.target.value);
+        }}
         onPaste={handlePaste}
         disabled={disabled}
       />
@@ -116,7 +118,7 @@ const SecretEditor = ({
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-purple-400 transition-colors"
+            className="flex items-center gap-1.5 text-sm text-content-muted transition-colors hover:text-accent-muted"
           >
             <ImagePlus size={16} />
             Add Image
@@ -129,7 +131,7 @@ const SecretEditor = ({
             className="hidden"
             onChange={(e) => {
               if (e.target.files) {
-                addImages(Array.from(e.target.files));
+                void addImages(Array.from(e.target.files));
                 e.target.value = "";
               }
             }}

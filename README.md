@@ -1,6 +1,6 @@
 # Secret
 
-### Create and send one-time links for sensitive data. 
+### Create and send one-time links for sensitive data.
 
 Created links can only be viewed once, and associated data is deleted immediately once requested.
 By default, all data is End-to-end encryped via AES-256 encryption in your browser. Any plaintext messages are **never** transmitted.

@@ -1,10 +1,10 @@
 import { X, ImageIcon } from "lucide-react";
 import type { Attachment } from "@/lib/types";
 
-type AttachmentListProps = {
+interface AttachmentListProps {
   attachments: Attachment[];
   onRemove: (id: string) => void;
-};
+}
 
 function formatSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -15,28 +15,19 @@ const AttachmentList = ({ attachments, onRemove }: AttachmentListProps) => {
   if (attachments.length === 0) return null;
 
   return (
-    <div className="border-t border-gray-600 pt-3 flex flex-col gap-2">
+    <div className="flex flex-col gap-2 border-t border-edge-subtle pt-3">
       {attachments.map((att) => (
-        <div
-          key={att.id}
-          className="flex items-center gap-3 bg-gray-700 px-3 py-2 group"
-        >
-          <img
-            src={att.dataUrl}
-            alt={att.name}
-            className="w-8 h-8 object-cover flex-shrink-0"
-          />
-          <ImageIcon size={14} className="text-gray-400 flex-shrink-0" />
-          <span className="text-sm text-gray-300 truncate flex-grow">
-            {att.name}
-          </span>
-          <span className="text-xs text-gray-500 flex-shrink-0">
-            {formatSize(att.size)}
-          </span>
+        <div key={att.id} className="group flex items-center gap-3 bg-surface-inset px-3 py-2">
+          <img src={att.dataUrl} alt={att.name} className="h-8 w-8 flex-shrink-0 object-cover" />
+          <ImageIcon size={14} className="flex-shrink-0 text-content-muted" />
+          <span className="flex-grow truncate text-sm text-content-body">{att.name}</span>
+          <span className="flex-shrink-0 text-xs text-content-faint">{formatSize(att.size)}</span>
           <button
             type="button"
-            onClick={() => onRemove(att.id)}
-            className="text-gray-500 hover:text-red-400 transition-colors flex-shrink-0"
+            onClick={() => {
+              onRemove(att.id);
+            }}
+            className="flex-shrink-0 text-content-faint transition-colors hover:text-danger-muted"
             title="Remove"
           >
             <X size={14} />

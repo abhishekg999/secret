@@ -36,7 +36,9 @@ function blobToDataUrl(blob: Blob): Promise<string> {
         reject(new Error("FileReader did not return a string"));
       }
     };
-    reader.onerror = () => reject(new Error("Failed to read blob"));
+    reader.onerror = () => {
+      reject(new Error("Failed to read blob"));
+    };
     reader.readAsDataURL(blob);
   });
 }

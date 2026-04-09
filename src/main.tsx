@@ -1,10 +1,11 @@
-import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
-import Layout from './components/Layout.tsx';
-import './index.css';
+import { createRoot } from "react-dom/client";
+import App from "./App.tsx";
+import Layout from "./components/Layout.tsx";
+import "./index.css";
 
-createRoot(document.getElementById('root')!).render(
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- root element is guaranteed in index.html
+createRoot(document.getElementById("root")!).render(
   <Layout>
     <App />
-  </Layout>
+  </Layout>,
 );

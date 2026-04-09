@@ -4,9 +4,9 @@ import type { ContentBlock, ImageBlock } from "@/lib/types";
 import { MESSAGE_MAX_HEIGHT } from "@/constants";
 import Lightbox from "./Lightbox";
 
-type SecretViewerProps = {
+interface SecretViewerProps {
   blocks: ContentBlock[];
-};
+}
 
 function downloadDataUrl(dataUrl: string, name: string) {
   const a = document.createElement("a");
@@ -23,24 +23,22 @@ const SecretViewer = ({ blocks }: SecretViewerProps) => {
 
   return (
     <div>
-      <div className="flex items-center gap-2 mb-3">
-        <div className="h-px flex-grow bg-gray-700" />
-        <h2 className="text-xs tracking-wider text-gray-500 uppercase">
-          Decrypted Message
-        </h2>
-        <div className="h-px flex-grow bg-gray-700" />
+      <div className="mb-3 flex items-center gap-2">
+        <div className="h-px flex-grow bg-edge" />
+        <h2 className="text-xs uppercase tracking-wider text-content-faint">Decrypted Message</h2>
+        <div className="h-px flex-grow bg-edge" />
       </div>
 
       <div className="flex flex-col gap-3">
         {textBlocks.length > 0 && (
           <div
-            className="bg-gray-700 p-6 border-l-4 border-purple-900 overflow-y-auto"
+            className="overflow-y-auto border-l-4 border-accent bg-surface-inset p-6"
             style={{ maxHeight: `${MESSAGE_MAX_HEIGHT}px` }}
           >
             {textBlocks.map((block, i) => (
               <p
                 key={i}
-                className="text-gray-200 whitespace-pre-wrap break-words leading-relaxed"
+                className="whitespace-pre-wrap break-words leading-relaxed text-content-body"
               >
                 {block.content}
               </p>
@@ -49,33 +47,32 @@ const SecretViewer = ({ blocks }: SecretViewerProps) => {
         )}
 
         {imageBlocks.length > 0 && (
-          <div className="border-t border-gray-600 pt-3 flex flex-col gap-2">
+          <div className="flex flex-col gap-2 border-t border-edge-subtle pt-3">
             {imageBlocks.map((block, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-3 bg-gray-700 px-3 py-2"
-              >
+              <div key={i} className="flex items-center gap-3 bg-surface-inset px-3 py-2">
                 <img
                   src={block.content}
                   alt={block.name}
-                  className="w-8 h-8 object-cover flex-shrink-0"
+                  className="h-8 w-8 flex-shrink-0 object-cover"
                 />
-                <ImageIcon size={14} className="text-gray-400 flex-shrink-0" />
-                <span className="text-sm text-gray-300 truncate flex-grow">
-                  {block.name}
-                </span>
+                <ImageIcon size={14} className="flex-shrink-0 text-content-muted" />
+                <span className="flex-grow truncate text-sm text-content-body">{block.name}</span>
                 <button
                   type="button"
-                  onClick={() => setLightboxImage(block)}
-                  className="text-gray-500 hover:text-purple-400 transition-colors flex-shrink-0"
+                  onClick={() => {
+                    setLightboxImage(block);
+                  }}
+                  className="flex-shrink-0 text-content-faint transition-colors hover:text-accent-muted"
                   title="Preview"
                 >
                   <Expand size={14} />
                 </button>
                 <button
                   type="button"
-                  onClick={() => downloadDataUrl(block.content, block.name)}
-                  className="text-gray-500 hover:text-purple-400 transition-colors flex-shrink-0"
+                  onClick={() => {
+                    downloadDataUrl(block.content, block.name);
+                  }}
+                  className="flex-shrink-0 text-content-faint transition-colors hover:text-accent-muted"
                   title="Download"
                 >
                   <Download size={14} />
@@ -90,7 +87,9 @@ const SecretViewer = ({ blocks }: SecretViewerProps) => {
         <Lightbox
           src={lightboxImage.content}
           alt={lightboxImage.name}
-          onClose={() => setLightboxImage(null)}
+          onClose={() => {
+            setLightboxImage(null);
+          }}
         />
       )}
     </div>
