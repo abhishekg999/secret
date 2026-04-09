@@ -1,59 +1,52 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-  ],
+  content: ["./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
     extend: {
       fontFamily: {
-        sans: ['JetBrains Mono', 'Courier New', 'monospace'],
-        mono: ['JetBrains Mono', 'Courier New', 'monospace'],
+        sans: ["JetBrains Mono", "Courier New", "monospace"],
+        mono: ["JetBrains Mono", "Courier New", "monospace"],
       },
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+        // Surfaces — three depth levels
+        surface: {
+          DEFAULT: "#111827", // page background
+          raised: "#1f2937", // cards, panels
+          inset: "#374151", // inputs, inner elements
         },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+        // Text hierarchy
+        content: {
+          DEFAULT: "#f3f4f6", // headings, primary
+          body: "#d1d5db", // body text
+          muted: "#9ca3af", // labels, hints
+          faint: "#6b7280", // least important
         },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+        // Borders — two levels
+        edge: {
+          DEFAULT: "#374151", // card borders, dividers
+          subtle: "#4b5563", // inner borders (inputs)
         },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
+        // Accent — purple
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "#581c87", // buttons, primary actions
+          hover: "#6b21a8", // hover state
+          muted: "#a78bfa", // soft text, icon hovers
+          ring: "#a855f7", // focus rings, drag
+          bar: "#9333ea", // progress bar fill
         },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+        // Status
+        danger: {
+          DEFAULT: "#7f1d1d", // background
+          edge: "#b91c1c", // border
+          content: "#fee2e2", // text on danger bg
+          muted: "#f87171", // standalone text
         },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+        success: "#4ade80",
+        warning: {
+          DEFAULT: "#eab308", // bar fill
+          content: "#facc15", // text
         },
       },
       borderRadius: {
@@ -61,21 +54,7 @@ module.exports = {
         md: "0",
         sm: "0",
       },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-      },
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};

@@ -5,6 +5,7 @@ workers_dev = false
 [env.dev]
 vars = { ENVIRONMENT = "dev" }
 d1_databases = [ { binding = "DB", database_name = "cfw-d1-secret", database_id = "6f5f390d-58b7-4221-a11e-3da9c4ae9b67" }]
+triggers = { crons = ["0 * * * *"] }
 
 [env.production]
 vars = { ENVIRONMENT = "production" }
@@ -13,3 +14,4 @@ routes = [
     { pattern = "secret.ahh.bet/api", zone_name = "ahh.bet" },
     { pattern = "secret.ahh.bet/api/*", zone_name = "ahh.bet" }
 ]
+triggers = { crons = ["0 * * * *"] }
