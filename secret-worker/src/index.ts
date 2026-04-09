@@ -49,6 +49,7 @@ export default {
   async scheduled(event: ScheduledEvent, env: { DB: D1Database }, ctx: ExecutionContext) {
     const db = drizzle(env.DB);
     const cutoff = Date.now() - ONE_DAY_MS;
-    await db.delete(secrets).where(lt(secrets.timestamp, cutoff));
+    const result = await db.delete(secrets).where(lt(secrets.timestamp, cutoff)).returning({ id: secrets.id });
+    console.log(`Expired ${result.length} secrets`);
   }
 };
