@@ -64,6 +64,7 @@
 @layer base {
   * {
     @apply border-border;
+    overscroll-behavior: none;
   }
   body {
     @apply bg-background text-foreground;
@@ -90,4 +91,27 @@
 
 .animate-fade-in {
   animation: fade-in 0.4s ease-in-out;
+}
+
+/* Minimal scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(75, 85, 99) rgb(31, 41, 55);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(31, 41, 55);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(75, 85, 99);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(107, 114, 128);
 }
