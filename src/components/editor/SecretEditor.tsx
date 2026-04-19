@@ -114,11 +114,11 @@ const SecretEditor = ({
       <AttachmentList attachments={attachments} onRemove={handleRemove} />
 
       {!disabled && (
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-1.5 text-sm text-content-muted transition-colors hover:text-accent-muted"
+            className="flex flex-shrink-0 items-center gap-1.5 text-sm text-content-muted transition-colors hover:text-accent-muted"
           >
             <ImagePlus size={16} />
             Add Image
@@ -136,7 +136,7 @@ const SecretEditor = ({
               }
             }}
           />
-          <div className="flex-grow">
+          <div className="min-w-[10rem] flex-grow">
             <SizeBudget usedBytes={usedBytes} maxBytes={MAX_PAYLOAD_BYTES} />
           </div>
         </div>
