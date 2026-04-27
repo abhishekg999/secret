@@ -67,25 +67,25 @@ const Home = () => {
 
   return (
     <>
-      <div className="absolute right-6 top-6">
-        <Popover>
-          <PopoverTrigger>
-            <HelpCircle className="h-8 w-8 text-content-muted hover:text-content" />
-          </PopoverTrigger>
-          <PopoverContent className="mx-6">
-            <p className="text-sm">
-              This site allows you to create one-time links{" "}
-              <b className="text-accent-muted">securely</b>. All data is end-to-end encrypted, the
-              key <b className="text-danger-muted">never</b> leaves your device. If the link is
-              viewed once, it is <b className="text-warning-content">permanently deleted</b> from
-              the server. Unviewed links automatically expire after{" "}
-              <b className="text-warning-content">24 hours</b>.
-            </p>
-          </PopoverContent>
-        </Popover>
-      </div>
-      <div className="w-[60%] min-w-[48rem] border border-edge bg-surface-raised p-6">
-        <h1 className="mb-4 text-center text-2xl font-bold text-content">Create One-Time Link</h1>
+      <div className="w-full max-w-3xl border border-edge bg-surface-raised p-4 sm:p-6">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h1 className="text-xl font-bold text-content sm:text-2xl">Create One-Time Link</h1>
+          <Popover>
+            <PopoverTrigger aria-label="How this works">
+              <HelpCircle className="h-6 w-6 flex-shrink-0 text-content-muted hover:text-content sm:h-7 sm:w-7" />
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-[calc(100vw-2rem)] max-w-sm sm:w-96">
+              <p className="text-sm">
+                This site allows you to create one-time links{" "}
+                <b className="text-accent-muted">securely</b>. All data is end-to-end encrypted, the
+                key <b className="text-danger-muted">never</b> leaves your device. If the link is
+                viewed once, it is <b className="text-warning-content">permanently deleted</b> from
+                the server. Unviewed links automatically expire after{" "}
+                <b className="text-warning-content">24 hours</b>.
+              </p>
+            </PopoverContent>
+          </Popover>
+        </div>
 
         <SecretEditor
           text={text}
@@ -116,23 +116,25 @@ const Home = () => {
         {generatedLink && (
           <div className="animate-fade-in mt-4">
             <p className="mb-2 text-sm text-content-muted">Your secret link:</p>
-            <div className="flex items-center border-l-4 border-accent bg-surface-inset p-3">
+            <div className="flex items-center gap-2 border-l-4 border-accent bg-surface-inset p-3">
               <input
                 type="text"
                 readOnly
                 value={generatedLink}
-                className="flex-grow bg-transparent text-sm text-content-body focus:outline-none"
+                className="min-w-0 flex-grow bg-transparent text-sm text-content-body focus:outline-none"
               />
+              {copied && (
+                <span className="flex-shrink-0 animate-pulse text-xs text-success">Copied!</span>
+              )}
               <button
                 onClick={handleCopyLink}
-                className={`ml-2 transition duration-300 ease-in-out ${
+                className={`flex-shrink-0 transition duration-300 ease-in-out ${
                   copied ? "text-success" : "text-accent-muted hover:text-accent-ring"
                 }`}
                 title={copied ? "Copied!" : "Copy to clipboard"}
               >
                 <Copy size={18} />
               </button>
-              {copied && <span className="ml-2 animate-pulse text-xs text-success">Copied!</span>}
             </div>
             <p className="mt-2 flex items-center gap-1.5 text-xs text-content-muted">
               <Clock size={12} />

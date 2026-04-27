@@ -52,7 +52,7 @@ const View = ({ hash }: ViewProps) => {
   };
 
   return (
-    <div className="w-[60%] min-w-[48rem] border border-edge bg-surface-raised p-6">
+    <div className="w-full max-w-3xl border border-edge bg-surface-raised p-4 sm:p-6">
       {!isViewing ? (
         <div className="flex flex-col text-center">
           <p className="mb-4 text-content-body">Viewing this secret will delete it.</p>
