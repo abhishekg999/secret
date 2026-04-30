@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { ImagePlus } from "lucide-react";
+import { Paperclip } from "lucide-react";
 import { nanoid } from "nanoid";
 import { MESSAGE_MIN_HEIGHT, MESSAGE_MAX_HEIGHT, MAX_PAYLOAD_BYTES } from "@/constants";
-import { compressImageFile, dataUrlByteSize } from "@/lib/image";
 import { contentSize } from "@/lib/payload";
 import type { Attachment } from "@/lib/types";
 import AttachmentList from "./AttachmentList";
@@ -38,19 +37,29 @@ const SecretEditor = ({
 
   const usedBytes = disabled ? 0 : contentSize(text, attachments);
 
-  const addImages = useCallback(
+  const addFiles = useCallback(
     async (files: File[]) => {
-      const imageFiles = files.filter((f) => f.type.startsWith("image/"));
-      if (imageFiles.length === 0) return;
+      if (files.length === 0) return;
 
       const newAttachments: Attachment[] = [];
-      for (const file of imageFiles) {
-        const dataUrl = await compressImageFile(file);
+      for (const file of files) {
+        const dataUrl = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            if (typeof reader.result === "string") resolve(reader.result);
+            else reject(new Error("FileReader did not return a string"));
+          };
+          reader.onerror = () => {
+            reject(new Error("Failed to read file"));
+          };
+          reader.readAsDataURL(file);
+        });
         newAttachments.push({
           id: nanoid(8),
           name: file.name,
           dataUrl,
-          size: dataUrlByteSize(dataUrl),
+          size: dataUrl.length,
+          mimeType: file.type || "application/octet-stream",
         });
       }
       onAttachmentsChange([...attachments, ...newAttachments]);
@@ -61,22 +70,21 @@ const SecretEditor = ({
   const handlePaste = useCallback(
     (e: React.ClipboardEvent) => {
       const files = Array.from(e.clipboardData.files);
-      if (files.some((f) => f.type.startsWith("image/"))) {
+      if (files.length > 0) {
         e.preventDefault();
-        void addImages(files);
+        void addFiles(files);
       }
     },
-    [addImages],
+    [addFiles],
   );
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
       setDragOver(false);
-      const files = Array.from(e.dataTransfer.files);
-      void addImages(files);
+      void addFiles(Array.from(e.dataTransfer.files));
     },
-    [addImages],
+    [addFiles],
   );
 
   const handleRemove = (id: string) => {
@@ -120,18 +128,17 @@ const SecretEditor = ({
             onClick={() => fileInputRef.current?.click()}
             className="flex flex-shrink-0 items-center gap-1.5 text-sm text-content-muted transition-colors hover:text-accent-muted"
           >
-            <ImagePlus size={16} />
-            Add Image
+            <Paperclip size={16} />
+            Attach File
           </button>
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*"
             multiple
             className="hidden"
             onChange={(e) => {
               if (e.target.files) {
-                void addImages(Array.from(e.target.files));
+                void addFiles(Array.from(e.target.files));
                 e.target.value = "";
               }
             }}

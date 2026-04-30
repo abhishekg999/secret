@@ -3,7 +3,7 @@ import type { SecretPayload, ContentBlock, Attachment } from "./types";
 
 export function encodePayload(
   text: string,
-  attachments: Pick<Attachment, "name" | "dataUrl">[],
+  attachments: Pick<Attachment, "name" | "dataUrl" | "mimeType">[],
 ): string {
   const blocks: ContentBlock[] = [];
 
@@ -13,10 +13,15 @@ export function encodePayload(
   }
 
   for (const att of attachments) {
-    blocks.push({ type: "image", content: att.dataUrl, name: att.name });
+    blocks.push({
+      type: "attachment",
+      content: att.dataUrl,
+      name: att.name,
+      mimeType: att.mimeType,
+    });
   }
 
-  const payload: SecretPayload = { v: 1, blocks };
+  const payload: SecretPayload = { v: 2, blocks };
   return JSON.stringify(payload);
 }
 

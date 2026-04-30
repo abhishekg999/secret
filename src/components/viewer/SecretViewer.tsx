@@ -1,25 +1,24 @@
 import { useState } from "react";
-import { ImageIcon, Download, Expand } from "lucide-react";
-import type { ContentBlock, ImageBlock } from "@/lib/types";
+import { FileText, File as FileIcon, Download } from "lucide-react";
+import type { ContentBlock, AttachmentBlock } from "@/lib/types";
 import { MESSAGE_MAX_HEIGHT } from "@/constants";
-import Lightbox from "./Lightbox";
+import Preview from "./Preview";
 
-interface SecretViewerProps {
-  blocks: ContentBlock[];
+function AttachmentIcon({ block }: { block: AttachmentBlock }) {
+  if (block.mimeType.startsWith("image/"))
+    return (
+      <img src={block.content} alt={block.name} className="h-8 w-8 flex-shrink-0 object-cover" />
+    );
+  if (block.mimeType === "application/pdf" || block.mimeType.startsWith("text/"))
+    return <FileText size={16} className="flex-shrink-0 text-content-muted" />;
+  return <FileIcon size={16} className="flex-shrink-0 text-content-muted" />;
 }
 
-function downloadDataUrl(dataUrl: string, name: string) {
-  const a = document.createElement("a");
-  a.href = dataUrl;
-  a.download = name;
-  a.click();
-}
-
-const SecretViewer = ({ blocks }: SecretViewerProps) => {
-  const [lightboxImage, setLightboxImage] = useState<ImageBlock | null>(null);
+const SecretViewer = ({ blocks }: { blocks: ContentBlock[] }) => {
+  const [previewBlock, setPreviewBlock] = useState<AttachmentBlock | null>(null);
 
   const textBlocks = blocks.filter((b) => b.type === "text");
-  const imageBlocks = blocks.filter((b): b is ImageBlock => b.type === "image");
+  const attachmentBlocks = blocks.filter((b): b is AttachmentBlock => b.type === "attachment");
 
   return (
     <div>
@@ -46,49 +45,40 @@ const SecretViewer = ({ blocks }: SecretViewerProps) => {
           </div>
         )}
 
-        {imageBlocks.length > 0 && (
+        {attachmentBlocks.length > 0 && (
           <div className="flex flex-col gap-2 border-t border-edge-subtle pt-3">
-            {imageBlocks.map((block, i) => (
-              <div key={i} className="flex items-center gap-3 bg-surface-inset px-3 py-2">
-                <img
-                  src={block.content}
-                  alt={block.name}
-                  className="h-8 w-8 flex-shrink-0 object-cover"
-                />
-                <ImageIcon size={14} className="flex-shrink-0 text-content-muted" />
+            {attachmentBlocks.map((block, i) => (
+              <div
+                key={i}
+                className="flex cursor-pointer items-center gap-3 bg-surface-inset px-3 py-2 ring-edge transition-shadow hover:ring-1"
+                onClick={() => {
+                  setPreviewBlock(block);
+                }}
+              >
+                <AttachmentIcon block={block} />
                 <span className="flex-grow truncate text-sm text-content-body">{block.name}</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLightboxImage(block);
-                  }}
-                  className="flex-shrink-0 text-content-faint transition-colors hover:text-accent-muted"
-                  title="Preview"
-                >
-                  <Expand size={14} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    downloadDataUrl(block.content, block.name);
-                  }}
+                <a
+                  href={block.content}
+                  download={block.name}
                   className="flex-shrink-0 text-content-faint transition-colors hover:text-accent-muted"
                   title="Download"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
                 >
                   <Download size={14} />
-                </button>
+                </a>
               </div>
             ))}
           </div>
         )}
       </div>
 
-      {lightboxImage && (
-        <Lightbox
-          src={lightboxImage.content}
-          alt={lightboxImage.name}
+      {previewBlock && (
+        <Preview
+          block={previewBlock}
           onClose={() => {
-            setLightboxImage(null);
+            setPreviewBlock(null);
           }}
         />
       )}

@@ -22,7 +22,7 @@ const Home = () => {
   const handleCreateLink = async () => {
     const hasContent = text.trim() || attachments.length > 0;
     if (!hasContent) {
-      setError("Please enter a secret or attach an image.");
+      setError("Please enter a secret or attach a file.");
       return;
     }
 
