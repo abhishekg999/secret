@@ -51,7 +51,9 @@ const SecretViewer = ({ blocks }: { blocks: ContentBlock[] }) => {
               <div
                 key={i}
                 className="flex cursor-pointer items-center gap-3 bg-surface-inset px-3 py-2 ring-edge transition-shadow hover:ring-1"
-                onClick={() => { setPreviewBlock(block); }}
+                onClick={() => {
+                  setPreviewBlock(block);
+                }}
               >
                 <AttachmentIcon block={block} />
                 <span className="flex-grow truncate text-sm text-content-body">{block.name}</span>
@@ -60,7 +62,9 @@ const SecretViewer = ({ blocks }: { blocks: ContentBlock[] }) => {
                   download={block.name}
                   className="flex-shrink-0 text-content-faint transition-colors hover:text-accent-muted"
                   title="Download"
-                  onClick={(e) => { e.stopPropagation(); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
                 >
                   <Download size={14} />
                 </a>
@@ -70,7 +74,14 @@ const SecretViewer = ({ blocks }: { blocks: ContentBlock[] }) => {
         )}
       </div>
 
-      {previewBlock && <Preview block={previewBlock} onClose={() => { setPreviewBlock(null); }} />}
+      {previewBlock && (
+        <Preview
+          block={previewBlock}
+          onClose={() => {
+            setPreviewBlock(null);
+          }}
+        />
+      )}
     </div>
   );
 };

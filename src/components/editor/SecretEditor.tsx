@@ -45,8 +45,13 @@ const SecretEditor = ({
       for (const file of files) {
         const dataUrl = await new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
-          reader.onload = () => { resolve(reader.result as string); };
-          reader.onerror = () => { reject(new Error("Failed to read file")); };
+          reader.onload = () => {
+            if (typeof reader.result === "string") resolve(reader.result);
+            else reject(new Error("FileReader did not return a string"));
+          };
+          reader.onerror = () => {
+            reject(new Error("Failed to read file"));
+          };
           reader.readAsDataURL(file);
         });
         newAttachments.push({

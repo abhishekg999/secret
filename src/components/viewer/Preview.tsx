@@ -24,7 +24,9 @@ const Preview = ({ block, onClose }: PreviewProps) => {
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKey);
-    return () => { document.removeEventListener("keydown", onKey); };
+    return () => {
+      document.removeEventListener("keydown", onKey);
+    };
   }, [onClose]);
 
   return (
@@ -38,14 +40,18 @@ const Preview = ({ block, onClose }: PreviewProps) => {
 
       <div
         className="flex flex-1 items-center justify-center overflow-hidden p-6 pb-0"
-        onClick={(e) => { e.stopPropagation(); }}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
         <PreviewContent block={block} />
       </div>
 
       <div
         className="flex items-center justify-between px-6 py-4"
-        onClick={(e) => { e.stopPropagation(); }}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
         <span className="truncate text-sm text-content-muted">{block.name}</span>
         <a
