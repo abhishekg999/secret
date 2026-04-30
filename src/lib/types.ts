@@ -3,16 +3,17 @@ export interface TextBlock {
   content: string;
 }
 
-export interface ImageBlock {
-  type: "image";
+export interface AttachmentBlock {
+  type: "attachment";
   content: string; // base64 data URI
   name: string;
+  mimeType: string;
 }
 
-export type ContentBlock = TextBlock | ImageBlock;
+export type ContentBlock = TextBlock | AttachmentBlock;
 
 export interface SecretPayload {
-  v: 1;
+  v: 2;
   blocks: ContentBlock[];
 }
 
@@ -21,4 +22,5 @@ export interface Attachment {
   name: string;
   dataUrl: string;
   size: number;
+  mimeType: string;
 }

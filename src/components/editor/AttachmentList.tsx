@@ -1,4 +1,4 @@
-import { X, ImageIcon } from "lucide-react";
+import { X, File as FileIcon } from "lucide-react";
 import type { Attachment } from "@/lib/types";
 
 interface AttachmentListProps {
@@ -18,8 +18,11 @@ const AttachmentList = ({ attachments, onRemove }: AttachmentListProps) => {
     <div className="flex flex-col gap-2 border-t border-edge-subtle pt-3">
       {attachments.map((att) => (
         <div key={att.id} className="group flex items-center gap-3 bg-surface-inset px-3 py-2">
-          <img src={att.dataUrl} alt={att.name} className="h-8 w-8 flex-shrink-0 object-cover" />
-          <ImageIcon size={14} className="flex-shrink-0 text-content-muted" />
+          {att.mimeType.startsWith("image/") ? (
+            <img src={att.dataUrl} alt={att.name} className="h-8 w-8 flex-shrink-0 object-cover" />
+          ) : (
+            <FileIcon size={16} className="h-8 w-8 flex-shrink-0 p-1.5 text-content-muted" />
+          )}
           <span className="flex-grow truncate text-sm text-content-body">{att.name}</span>
           <span className="flex-shrink-0 text-xs text-content-faint">{formatSize(att.size)}</span>
           <button
