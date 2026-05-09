@@ -23,7 +23,7 @@ const generateKey = (length: number) => {
 const deriveEncryptionKey = async (baseKey: string) => {
   const keyData = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(baseKey));
 
-  return crypto.subtle.importKey("raw", keyData, "AES-CBC", false, ["encrypt", "decrypt"]);
+  return crypto.subtle.importKey("raw", keyData, "AES-GCM", false, ["encrypt", "decrypt"]);
 };
 
 export async function createEncryptionPair(
@@ -32,11 +32,11 @@ export async function createEncryptionPair(
 ): Promise<[string, string]> {
   const key = generateKey(keyLength);
   const encryptionKey = await deriveEncryptionKey(key);
-  const iv = crypto.getRandomValues(new Uint8Array(16));
+  const iv = crypto.getRandomValues(new Uint8Array(12));
 
   const enc = await crypto.subtle.encrypt(
     {
-      name: "AES-CBC",
+      name: "AES-GCM",
       iv: iv,
     },
     encryptionKey,
@@ -54,12 +54,12 @@ export async function decryptData(key: string, data: string) {
   try {
     const encryptionKey = await deriveEncryptionKey(key);
     const encData = base64ToUint8(data);
-    const iv = encData.slice(0, 16);
-    const enc = encData.slice(16);
+    const iv = encData.slice(0, 12);
+    const enc = encData.slice(12);
 
     const dec = await crypto.subtle.decrypt(
       {
-        name: "AES-CBC",
+        name: "AES-GCM",
         iv: iv,
       },
       encryptionKey,
