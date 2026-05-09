@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently -n fe,worker -c blue,green \"vite\" \"cd secret-worker && bun run dev\"",
+    "dev:fe": "vite",
     "build": "tsc --noEmit && vite build",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -39,6 +40,7 @@
     "@typia/unplugin": "^12.0.2",
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.27",
+    "concurrently": "^9.2.1",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react-hooks": "^5.2.0",
