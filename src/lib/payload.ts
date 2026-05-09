@@ -30,14 +30,9 @@ export function contentSize(text: string, attachments: Pick<Attachment, "size">[
 }
 
 export function decodePayload(raw: string): ContentBlock[] {
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    if (typia.is<SecretPayload>(parsed)) {
-      return parsed.blocks;
-    }
-  } catch {
-    // Not JSON — legacy plain text
+  const parsed: unknown = JSON.parse(raw);
+  if (!typia.is<SecretPayload>(parsed)) {
+    throw new Error("Invalid payload");
   }
-
-  return [{ type: "text", content: raw }];
+  return parsed.blocks;
 }
