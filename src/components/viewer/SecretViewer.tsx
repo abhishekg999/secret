@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileText, File as FileIcon, Download } from "lucide-react";
+import { FileText, File as FileIcon, Download, Copy } from "lucide-react";
 import type { ContentBlock, AttachmentBlock } from "@/lib/types";
 import { MESSAGE_MAX_HEIGHT } from "@/constants";
 import Preview from "./Preview";
@@ -16,9 +16,18 @@ function AttachmentIcon({ block }: { block: AttachmentBlock }) {
 
 const SecretViewer = ({ blocks }: { blocks: ContentBlock[] }) => {
   const [previewBlock, setPreviewBlock] = useState<AttachmentBlock | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const textBlocks = blocks.filter((b) => b.type === "text");
   const attachmentBlocks = blocks.filter((b): b is AttachmentBlock => b.type === "attachment");
+
+  const handleCopy = () => {
+    void navigator.clipboard.writeText(textBlocks.map((b) => b.content).join("\n"));
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
 
   return (
     <div>
@@ -31,9 +40,22 @@ const SecretViewer = ({ blocks }: { blocks: ContentBlock[] }) => {
       <div className="flex flex-col gap-3">
         {textBlocks.length > 0 && (
           <div
-            className="overflow-y-auto border-l-4 border-accent bg-surface-inset p-6"
+            className="relative overflow-y-auto border-l-4 border-accent bg-surface-inset p-6 pr-12"
             style={{ maxHeight: `${MESSAGE_MAX_HEIGHT}px` }}
           >
+            <div className="absolute right-3 top-3 flex items-center gap-2">
+              {copied && <span className="animate-pulse text-xs text-success">Copied!</span>}
+              <button
+                onClick={handleCopy}
+                className={`transition duration-300 ease-in-out ${
+                  copied ? "text-success" : "text-accent-muted hover:text-accent-ring"
+                }`}
+                title={copied ? "Copied!" : "Copy to clipboard"}
+                aria-label="Copy decrypted message to clipboard"
+              >
+                <Copy size={16} />
+              </button>
+            </div>
             {textBlocks.map((block, i) => (
               <p
                 key={i}
